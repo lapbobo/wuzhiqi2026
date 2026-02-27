@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>五子棋</title>
+	<link rel="icon" href="favicon.ico">
+	<link href="css/wuzi.css" rel="stylesheet">
+</head>
+
+<body>
+	<div class="app">
+
+		<!-- ===== 开始界面 ===== -->
+		<div id="startScreen" class="screen start-screen">
+			<div class="start-card">
+				<h1 class="logo">五子棋</h1>
+				<p class="subtitle">经典策略棋盘游戏</p>
+				<div class="mode-buttons">
+					<button id="btnPvP" class="mode-btn">
+						<span class="mode-icon">👥</span>
+						<span class="mode-label">双人对战</span>
+						<span class="mode-desc">同屏竞技</span>
+					</button>
+					<button id="btnPvE" class="mode-btn">
+						<span class="mode-icon">🤖</span>
+						<span class="mode-label">人机对战</span>
+						<span class="mode-desc">挑战 AI</span>
+					</button>
+				</div>
+			</div>
+		</div>
+
+		<!-- ===== 设置界面 ===== -->
+		<div id="setupScreen" class="screen setup-screen hidden">
+			<div class="setup-card">
+				<h2>对局设置</h2>
+
+				<!-- 玩家1 -->
+				<div class="player-setup">
+					<div class="setup-header">
+						<span class="piece-dot black"></span>
+						<span>黑棋 · 先手</span>
+					</div>
+					<input id="p1NameInput" type="text" placeholder="甜大官" maxlength="8" class="name-input">
+					<div class="avatar-title">选择头像</div>
+					<div id="p1AvatarGrid" class="avatar-grid"></div>
+				</div>
+
+				<!-- 玩家2 (PvP) -->
+				<div id="p2SetupSection" class="player-setup">
+					<div class="setup-header">
+						<span class="piece-dot white"></span>
+						<span>白棋 · 后手</span>
+					</div>
+					<input id="p2NameInput" type="text" placeholder="万小布" maxlength="8" class="name-input">
+					<div class="avatar-title">选择头像</div>
+					<div id="p2AvatarGrid" class="avatar-grid"></div>
+				</div>
+
+				<!-- AI 设置 (PvE) -->
+				<div id="aiSetupSection" class="player-setup" style="display:none;">
+					<div class="setup-header">
+						<span class="piece-dot white"></span>
+						<span>AI 难度</span>
+					</div>
+					<div class="radio-row">
+						<label><input name="aiLevel" type="radio" value="0"><span>入门</span></label>
+						<label><input name="aiLevel" type="radio" value="1" checked><span>进阶</span></label>
+						<label><input name="aiLevel" type="radio" value="2"><span>高手</span></label>
+					</div>
+				</div>
+
+				<div class="setup-actions">
+					<button id="btnBackToStart" class="btn secondary">返回</button>
+					<button id="btnStartGame" class="btn primary">开始对弈</button>
+				</div>
+			</div>
+		</div>
+
+		<!-- ===== 游戏界面 ===== -->
+		<div id="gameScreen" class="screen game-screen hidden">
+			<!-- 玩家1 信息 -->
+			<div id="p1Panel" class="player-panel left">
+				<div id="p1GameAvatar" class="game-avatar">😀</div>
+				<div class="panel-info">
+					<div id="p1GameName" class="panel-name">甜大官</div>
+					<div class="panel-role">● 黑棋</div>
+				</div>
+			</div>
+
+			<!-- 棋盘 -->
+			<div class="board-area">
+				<div id="turnIndicator" class="turn-indicator">● 甜大官 落子</div>
+				<div class="canvas-wrap">
+					<canvas id="wuzi" width="600" height="600"></canvas>
+				</div>
+				<div class="controls">
+					<button id="regretBtn" class="btn outline">悔棋 (3)</button>
+					<button id="restartBtn" class="btn outline">重新开始</button>
+				</div>
+			</div>
+
+			<!-- 玩家2 信息 -->
+			<div id="p2Panel" class="player-panel right">
+				<div id="p2GameAvatar" class="game-avatar">😎</div>
+				<div class="panel-info">
+					<div id="p2GameName" class="panel-name">万小布</div>
+					<div class="panel-role">○ 白棋</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- ===== 结果弹窗 ===== -->
+	<div id="resultModal" class="modal-overlay">
+		<div class="modal-card">
+			<div id="resultAvatar" class="result-avatar">🏆</div>
+			<h2 id="resultTitle">获胜！</h2>
+			<p id="resultDesc">精妙绝伦！</p>
+			<button id="modalCloseBtn" class="btn primary">返回</button>
+		</div>
+	</div>
+
+	<audio id="clickAudio" src="audio/click.wav" preload="auto"></audio>
+	<audio id="selectAudio" src="audio/select.wav" preload="auto"></audio>
+
+	<script type="module" src="js/main.js"></script>
+</body>
+
+</html>
