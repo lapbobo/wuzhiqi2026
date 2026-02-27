@@ -37,26 +37,39 @@
 			<div class="setup-card">
 				<h2>对局设置</h2>
 
-				<!-- 玩家1 -->
-				<div class="player-setup">
-					<div class="setup-header">
-						<span class="piece-dot black"></span>
-						<span>黑棋 · 先手</span>
+				<!-- 玩家名称设置 -->
+				<div class="names-row">
+					<div class="name-group">
+						<div class="setup-header">
+							<span class="piece-dot black"></span>
+							<span>黑棋 · 先手</span>
+						</div>
+						<input id="p1NameInput" type="text" placeholder="甜大官" maxlength="8" class="name-input">
 					</div>
-					<input id="p1NameInput" type="text" placeholder="甜大官" maxlength="8" class="name-input">
-					<div class="avatar-title">选择头像</div>
-					<div id="p1AvatarGrid" class="avatar-grid"></div>
+					<div id="p2SetupSection" class="name-group">
+						<div class="setup-header">
+							<span class="piece-dot white"></span>
+							<span>白棋 · 后手</span>
+						</div>
+						<input id="p2NameInput" type="text" placeholder="万小布" maxlength="8" class="name-input">
+					</div>
 				</div>
 
-				<!-- 玩家2 (PvP) -->
-				<div id="p2SetupSection" class="player-setup">
-					<div class="setup-header">
-						<span class="piece-dot white"></span>
-						<span>白棋 · 后手</span>
+				<!-- 共享头像选择 -->
+				<div class="avatar-section">
+					<div class="avatar-tabs">
+						<button id="tabP1" class="avatar-tab active" type="button">
+							<span class="piece-dot black"></span>
+							<span id="tabP1Preview" class="tab-preview">😀</span>
+							选玩家1头像
+						</button>
+						<button id="tabP2" class="avatar-tab" type="button">
+							<span class="piece-dot white"></span>
+							<span id="tabP2Preview" class="tab-preview">😎</span>
+							选玩家2头像
+						</button>
 					</div>
-					<input id="p2NameInput" type="text" placeholder="万小布" maxlength="8" class="name-input">
-					<div class="avatar-title">选择头像</div>
-					<div id="p2AvatarGrid" class="avatar-grid"></div>
+					<div id="sharedAvatarGrid" class="avatar-grid"></div>
 				</div>
 
 				<!-- AI 设置 (PvE) -->

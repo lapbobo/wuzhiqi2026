@@ -298,10 +298,80 @@ h2 {
     z-index: 1;
 }
 
-.avatar-pick.selected {
-    border-color: var(--accent) !important;
-    box-shadow: 0 0 0 2px rgba(192, 57, 43, 0.3);
+.avatar-pick.selected-p1 {
+    border-color: #222 !important;
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.4);
     transform: scale(1.1);
+}
+
+.avatar-pick.selected-p2 {
+    border-color: var(--accent) !important;
+    box-shadow: 0 0 0 2px rgba(192, 57, 43, 0.4);
+    transform: scale(1.1);
+}
+
+.avatar-pick.disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* Names Row */
+.names-row {
+    display: flex;
+    gap: 1.2rem;
+    margin-bottom: 1.2rem;
+    padding-bottom: 1.2rem;
+    border-bottom: 1px solid rgba(139, 105, 20, 0.1);
+}
+
+.name-group {
+    flex: 1;
+}
+
+/* Avatar Section with Tabs */
+.avatar-section {
+    margin-bottom: 1.2rem;
+    padding-bottom: 1.2rem;
+    border-bottom: 1px solid rgba(139, 105, 20, 0.1);
+}
+
+.avatar-tabs {
+    display: flex;
+    gap: 0.6rem;
+    margin-bottom: 0.8rem;
+}
+
+.avatar-tab {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.8rem;
+    border: 2px solid rgba(139, 105, 20, 0.15);
+    border-radius: 8px;
+    background: transparent;
+    font-family: inherit;
+    font-size: 0.85rem;
+    color: var(--text-mid);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.avatar-tab:hover {
+    border-color: rgba(139, 105, 20, 0.3);
+}
+
+.avatar-tab.active {
+    border-color: var(--accent);
+    background: rgba(192, 57, 43, 0.06);
+    color: var(--text-dark);
+    font-weight: 700;
+}
+
+.tab-preview {
+    font-size: 1.2rem;
+    line-height: 1;
 }
 
 .radio-row {

@@ -1,7 +1,6 @@
 import { Game } from './game.js';
 import { generateAvatars, createAvatarElement } from './avatars.js';
 
-// Module scripts are deferred — DOM is ready when this runs
 const avatars = generateAvatars();
 
 const startScreen = document.getElementById('startScreen');
@@ -11,6 +10,7 @@ const gameScreen = document.getElementById('gameScreen');
 let selectedMode = 'pvp';
 let p1Avatar = avatars[0];
 let p2Avatar = avatars[50];
+let activeTab = 1; // 当前正在为哪位玩家选头像: 1 或 2
 let game = null;
 
 const DIFFICULTY = [
@@ -27,9 +27,7 @@ function showScreen(screen) {
 }
 
 function ensureGame() {
-    if (!game) {
-        game = new Game();
-    }
+    if (!game) game = new Game();
     return game;
 }
 
@@ -49,32 +47,113 @@ function showSetup() {
 
     const p2Section = document.getElementById('p2SetupSection');
     const aiSection = document.getElementById('aiSetupSection');
+    const avatarSection = document.querySelector('.avatar-section');
 
     if (selectedMode === 'pvp') {
-        p2Section.style.display = 'block';
+        p2Section.style.display = '';
         aiSection.style.display = 'none';
+        avatarSection.style.display = '';
     } else {
         p2Section.style.display = 'none';
-        aiSection.style.display = 'block';
+        aiSection.style.display = '';
+        avatarSection.style.display = '';
     }
 
-    renderAvatarPicker('p1AvatarGrid', (av) => { p1Avatar = av; }, 0);
-    renderAvatarPicker('p2AvatarGrid', (av) => { p2Avatar = av; }, 50);
+    // 重置默认选择
+    p1Avatar = avatars[0];
+    p2Avatar = avatars[50];
+    activeTab = 1;
+
+    renderSharedAvatarGrid();
+    updateTabs();
 }
 
-function renderAvatarPicker(containerId, onSelect, defaultIdx) {
-    const container = document.getElementById(containerId);
+// =============== 头像标签页切换 ===============
+document.getElementById('tabP1').addEventListener('click', () => {
+    activeTab = 1;
+    updateTabs();
+});
+
+document.getElementById('tabP2').addEventListener('click', () => {
+    activeTab = 2;
+    updateTabs();
+});
+
+function updateTabs() {
+    const tab1 = document.getElementById('tabP1');
+    const tab2 = document.getElementById('tabP2');
+    tab1.classList.toggle('active', activeTab === 1);
+    tab2.classList.toggle('active', activeTab === 2);
+
+    // 显示预览 emoji
+    document.getElementById('tabP1Preview').textContent = p1Avatar.emoji;
+    document.getElementById('tabP2Preview').textContent = p2Avatar.emoji;
+
+    // PvE 模式隐藏 P2 标签
+    if (selectedMode === 'pve') {
+        tab2.style.display = 'none';
+        activeTab = 1;
+        tab1.classList.add('active');
+    } else {
+        tab2.style.display = '';
+    }
+
+    refreshAvatarStates();
+}
+
+// =============== 共享头像库 ===============
+function renderSharedAvatarGrid() {
+    const container = document.getElementById('sharedAvatarGrid');
     container.innerHTML = '';
-    avatars.forEach((av, i) => {
+
+    avatars.forEach((av) => {
         const el = createAvatarElement(av, 40);
         el.classList.add('avatar-pick');
-        if (i === defaultIdx) el.classList.add('selected');
+
         el.addEventListener('click', () => {
-            container.querySelectorAll('.avatar-pick').forEach(a => a.classList.remove('selected'));
-            el.classList.add('selected');
-            onSelect(av);
+            const clickedId = av.id;
+
+            // 不可选择另一位玩家已选的头像
+            if (activeTab === 1 && p2Avatar && p2Avatar.id === clickedId) return;
+            if (activeTab === 2 && p1Avatar && p1Avatar.id === clickedId) return;
+
+            if (activeTab === 1) {
+                p1Avatar = av;
+            } else {
+                p2Avatar = av;
+            }
+
+            updateTabs();
         });
+
         container.appendChild(el);
+    });
+
+    refreshAvatarStates();
+}
+
+function refreshAvatarStates() {
+    const container = document.getElementById('sharedAvatarGrid');
+    const items = container.querySelectorAll('.avatar-pick');
+
+    items.forEach((el, i) => {
+        const av = avatars[i];
+        const isP1 = p1Avatar && p1Avatar.id === av.id;
+        const isP2 = p2Avatar && p2Avatar.id === av.id;
+
+        el.classList.remove('selected-p1', 'selected-p2', 'disabled');
+
+        if (isP1) {
+            el.classList.add('selected-p1');
+        } else if (isP2) {
+            el.classList.add('selected-p2');
+        }
+
+        // PvP 模式下，另一方已选的头像标灰
+        if (selectedMode === 'pvp') {
+            if (activeTab === 1 && isP2) el.classList.add('disabled');
+            if (activeTab === 2 && isP1) el.classList.add('disabled');
+        }
     });
 }
 
